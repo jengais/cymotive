@@ -6,8 +6,7 @@ from langgraph.graph import StateGraph, START, END
 
 # Import your state and nodes
 from utils.state import AgentState
-from graph.nodes import retrieve_node
-from graph.graph import app
+from graph.builder import app
 
 if __name__ == "__main__":
 
