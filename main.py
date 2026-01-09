@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
 
     # 3. Load incidents from CSV
-    df = pd.read_csv("samples/inpyt_sample.csv")
+    df = pd.read_csv("samples/input_sample.csv")
     
     print(f"--- Starting Processing of {len(df)} Incidents ---")
     
