@@ -2,6 +2,10 @@ from typing import TypedDict, List
 from langgraph.graph import StateGraph, START, END
 
 from utils.state import AgentState
+from nodes.retrieve import retrieve_node
+from nodes.summarize import summarize_report
+from nodes.mitigate import suggest_mitigation
+
 # from typing import List, TypedDict
 
 
@@ -11,27 +15,10 @@ from utils.state import AgentState
 #     mitigation: str
 #     context: List[str]  # Retrieved from Pinecone
 
-# 2. Define Nodes
-def retrieve_similar_incidents(state: AgentState):
-    # Logic to query Pinecone vector index
-    # query_vector = embedding_model.encode(state['report'])
-    # results = index.query(vector=query_vector, top_k=2)
-    return {"context": ["Similar Incident A", "Similar Incident B"]}
-
-def summarize_report(state: AgentState):
-    # LLM call (e.g., using Gemini API)
-    # response = model.invoke(f"Summarize this report: {state['report']}")
-    return {"summary": "Brief summary of the security breach."}
-
-def suggest_mitigation(state: AgentState):
-    # LLM call using summary and context
-    return {"mitigation": "1. Reset passwords. 2. Patch CVE-XXXX."}
-
-
 
 # 3. Build the Graph
 workflow = StateGraph(AgentState)
-workflow.add_node("retrieve", retrieve_similar_incidents)
+workflow.add_node("retrieve", retrieve_node)
 workflow.add_node("summarize", summarize_report)
 workflow.add_node("mitigate", suggest_mitigation)
 
