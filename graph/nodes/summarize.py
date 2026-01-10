@@ -1,7 +1,8 @@
 import os
-from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from utils.state import AgentState
+
+from utils.start_all_models import llm_summarize
 
 async def summarize_report(state: AgentState):
     """
@@ -9,14 +10,6 @@ async def summarize_report(state: AgentState):
     technical context retrieved from the knowledge base.
     """
     
-    # 1. Initialize Gemini 2.5 Flash
-    # We use temperature=0 for consistent, factual summaries
-    llm = ChatGoogleGenerativeAI(
-        model="gemini-2.5-flash",
-        google_api_key=os.getenv("GEMINI_API_KEY"),
-        temperature=0
-    )
-
     # 2. Extract data from state
     report = state.get("report", "No report provided.")
     # Context is usually a list of strings from your 'retrieve' node
@@ -39,8 +32,8 @@ async def summarize_report(state: AgentState):
     ])
 
     # 4. Create the chain and invoke
-    chain = prompt_template | llm
-    response = await chain.invoke({"report": report, "context": context})
+    chain = prompt_template | llm_summarize
+    response = await chain.ainvoke({"report": report, "context": context})
 
     # 5. Return the update for LangGraph state
     return {"summary": response.content}

@@ -4,19 +4,9 @@ from dotenv import load_dotenv
 # loads the variables into the environment
 load_dotenv()
 
-from pinecone import Pinecone, ServerlessSpec
-from sentence_transformers import SentenceTransformer
-
 from utils.state import AgentState
 
-# Load model once outside the node to avoid reloading every time
-embed_model = SentenceTransformer('all-MiniLM-L6-v2')
-
-# 2. Setup Pinecone
-PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
-pc = Pinecone(api_key=PINECONE_API_KEY)
-index_name = "cyber-copilot-incidents"
-index = pc.Index(index_name)
+from utils.start_all_models import embed_model, index
 
 
 

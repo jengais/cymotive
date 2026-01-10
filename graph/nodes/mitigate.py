@@ -1,19 +1,13 @@
 import os
-from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from utils.state import AgentState
+from utils.start_all_models import llm_mitigate
+
 
 async def suggest_mitigation(state: AgentState):
     """
     Suggests a step-by-step mitigation plan based on the incident summary.
     """
-    
-    # 1. Initialize Gemini 2.5 Flash
-    llm = ChatGoogleGenerativeAI(
-        model="gemini-2.5-flash",
-        google_api_key=os.getenv("GEMINI_API_KEY"),
-        temperature=0.2  # Slightly higher for creative problem solving
-    )
 
     # 2. Extract the summary created by the previous node
     summary = state.get("summary", "No summary available.")
@@ -32,8 +26,8 @@ async def suggest_mitigation(state: AgentState):
     ])
 
     # 4. Chain and Invoke
-    chain = prompt_template | llm
-    response = await chain.invoke({"summary": summary})
+    chain = prompt_template | llm_mitigate
+    response = await chain.ainvoke({"summary": summary})
 
     # 5. Return the final update
     return {"mitigation": response.content}
