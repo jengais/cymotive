@@ -7,7 +7,10 @@ load_dotenv()
 from langchain_google_genai import ChatGoogleGenerativeAI
 from pinecone import Pinecone
 from sentence_transformers import SentenceTransformer
+from pinecone_text.sparse import BM25Encoder
 
+# Load the pre-trained rules
+bm25_encoder = BM25Encoder().load("ingestion/bm25_values.json")
 
 # Initialize Gemini 2.5 Flash
 llm_summarize = ChatGoogleGenerativeAI(
@@ -30,7 +33,7 @@ embed_model = SentenceTransformer('all-MiniLM-L6-v2')
 # 2. Setup Pinecone
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 pc = Pinecone(api_key=PINECONE_API_KEY)
-index_name = "cyber-copilot-incidents"
+index_name = os.getenv("VEC_INDEX_NAME")
 index = pc.Index(index_name)
 
 
