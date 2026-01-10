@@ -13,28 +13,45 @@ async def summarize_report(state: AgentState):
     
     # 2. Extract data from state
     report = state.get("report", "No report provided.")
-    # Context is usually a list of strings from your 'retrieve' node
-    context = "\n".join(state.get("context", []))
+    context_list = state.get("context", [])
+    context = "\n".join(context_list) if context_list else "No context available."
 
-    # 3. Define the Prompt Template
+
+    SUMMARIZATION_EXAMPLES = """
+    EXAMPLE 1:
+    USER REPORT: System slow since 2pm. Database keeps restarting. Error code 500 in logs.
+    RETRIEVED CONTEXT: Past Incident: DB OOM due to massive query. Historical Mitigation: Increase memory.
+    SUMMARY: Technical summary: A Database Out-of-Memory (OOM) error caused repeated service restarts and 500-level errors starting at 14:00 UTC. The root cause is likely an unoptimized, massive query similar to past incidents. Immediate impact includes "100%" service unavailability during restart cycles.
+    """
+
+    # Inside summarize_report:
     prompt_template = ChatPromptTemplate.from_messages([
         ("system", (
             "You are a Senior Site Reliability Engineer (SRE). "
-            "Your task is to create a concise technical summary of an incident. "
-            "Use the 'Retrieved Context' to add technical depth (server names, "
-            "error codes, or known fix patterns) to the 'User Report'."
+            "Create concise 3-sentence technical summaries. "
+            f"{SUMMARIZATION_EXAMPLES}"
         )),
         ("human", (
-            "USER REPORT:\n{report}\n\n"
-            "RETRIEVED CONTEXT:\n{context}\n\n"
-            "Provide a 3-sentence technical summary including "
-            "the likely root cause and the immediate impact."
+            "<report>{report}</report>\n"
+            "<context>{context}</context>\n\n"
+            "Generate a <summary> based on the above tags."
         ))
     ])
 
-    # 4. Create the chain and invoke
-    chain = prompt_template | llm_summarize
-    response = await chain.ainvoke({"report": report, "context": context})
+    try:
+        # 2. Chain and Invoke
+        chain = prompt_template | llm_summarize
+        
+        # We use a timeout or safety check if needed
+        response = await chain.ainvoke({"report": report, "context": context})
 
-    # 5. Return the update for LangGraph state
-    return {"summary": response.content}
+        # 3. Return the summary
+        return {"summary": response.content}
+
+    except Exception as e:
+        # 4. Handle LLM or Prompt failures
+        print(f"⚠️ Error in summarize_report: {e}")
+        
+        # Return a fallback summary so the next node (mitigation) still has something to work with
+        fallback_summary = f"Technical summary unavailable. Original Report: {report[:100]}..."
+        return {"summary": fallback_summary}

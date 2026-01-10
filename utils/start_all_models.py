@@ -10,7 +10,12 @@ from sentence_transformers import SentenceTransformer
 from pinecone_text.sparse import BM25Encoder
 
 # Load the pre-trained rules
-bm25_encoder = BM25Encoder().load("ingestion/bm25_values.json")
+bm25_path = "ingestion/bm25_values.json"
+
+if os.path.exists(bm25_path):
+    bm25_encoder = BM25Encoder().load(bm25_path)
+else:
+    print(f"⚠️ Warning: {bm25_path} not found. Hybrid search might fail.")
 
 # Initialize Gemini 2.5 Flash
 llm_summarize = ChatGoogleGenerativeAI(
