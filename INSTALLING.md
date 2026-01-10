@@ -1,8 +1,3 @@
-This Installation.md file provides a step-by-step guide for a user to set up your Cybersecurity Copilot project from scratch. It covers the environment variables, dependency installation, and the order of execution for ingestion and the graph1111111111111111.
-
-\+3
-
-Markdown
 
 \# 🛠️ Installation & Setup Guide
 
@@ -11,16 +6,16 @@ This guide will walk you through the steps to set up the **\*\*Cybersecurity Cop
 \#\# 1\. Prerequisites  
 Ensure you have the following installed:  
 \* **\*\*Python 3.9+\*\***  
-\* A **\*\*Google AI Studio\*\*** API Key (for Gemini 2.0 Flash)  
+\* A **\*\*Google AI Studio\*\*** API Key (for Gemini 2.5 Flash)  
 \* A **\*\*Pinecone\*\*** Account and API Key  
 \* A **\*\*Git\*\*** client
 
 \---
 
 \#\# 2\. Clone the Repository  
-\`\`\`bash  
-git clone \<your-repository-url\>  
-cd cybersecurity-copilot
+
+git clone [\<your-repository-url\>  ](https://github.com/jengais/cymotive.git)
+cd cymotive
 
 ## **3\. Set Up a Virtual Environment**
 
@@ -66,8 +61,6 @@ VEC\_INDEX\_NAME=cyber-copilot-incidents
 Before running the AI assistant, you must initialize the knowledge base:
 
 1. **Ingest Data:** Run the ingestion script to chunk the dummy incident set, generate embeddings (using all-MiniLM-L6-v2), and upsert them to Pinecone.  
-   Bash  
-   python ingestion/ingest\_data.py
 
 2. **Verify BM25:** Ensure the ingestion/bm25\_values.json file has been created. This file is required for hybrid search.
 
