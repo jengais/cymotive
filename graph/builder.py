@@ -6,17 +6,9 @@ from graph.nodes.retrieve import retrieve_node
 from graph.nodes.summarize import summarize_report
 from graph.nodes.mitigate import suggest_mitigation
 
-# from typing import List, TypedDict
 
 
-# class AgentState(TypedDict):
-#     report: str
-#     summary: str
-#     mitigation: str
-#     context: List[str]  # Retrieved from Pinecone
-
-
-# 3. Build the Graph
+# Build the Graph
 workflow = StateGraph(AgentState)
 workflow.add_node("retrieve", retrieve_node)
 workflow.add_node("summarize", summarize_report)

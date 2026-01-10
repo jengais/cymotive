@@ -3,7 +3,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from utils.state import AgentState
 
-def suggest_mitigation(state: AgentState):
+async def suggest_mitigation(state: AgentState):
     """
     Suggests a step-by-step mitigation plan based on the incident summary.
     """
@@ -33,7 +33,7 @@ def suggest_mitigation(state: AgentState):
 
     # 4. Chain and Invoke
     chain = prompt_template | llm
-    response = chain.invoke({"summary": summary})
+    response = await chain.invoke({"summary": summary})
 
     # 5. Return the final update
     return {"mitigation": response.content}

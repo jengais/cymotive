@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-# This looks for a .env file and loads the variables into the environment
+# loads the variables into the environment
 load_dotenv()
 
 from pinecone import Pinecone, ServerlessSpec

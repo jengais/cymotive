@@ -3,7 +3,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from utils.state import AgentState
 
-def summarize_report(state: AgentState):
+async def summarize_report(state: AgentState):
     """
     Summarizes the incident by combining the user's report with 
     technical context retrieved from the knowledge base.
@@ -33,14 +33,14 @@ def summarize_report(state: AgentState):
         ("human", (
             "USER REPORT:\n{report}\n\n"
             "RETRIEVED CONTEXT:\n{context}\n\n"
-            "Please provide a 3-sentence technical summary including "
+            "Provide a 3-sentence technical summary including "
             "the likely root cause and the immediate impact."
         ))
     ])
 
     # 4. Create the chain and invoke
     chain = prompt_template | llm
-    response = chain.invoke({"report": report, "context": context})
+    response = await chain.invoke({"report": report, "context": context})
 
     # 5. Return the update for LangGraph state
     return {"summary": response.content}

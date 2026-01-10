@@ -1,5 +1,4 @@
-# 1. Define the State
-
+# Define the State
 
 from typing import List, TypedDict
 
