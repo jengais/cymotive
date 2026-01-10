@@ -34,4 +34,4 @@ index_name = "cyber-copilot-incidents"
 index = pc.Index(index_name)
 
 
-print("✅ Project models and Pinecone index initialized successfully.")
+print("\n✅ Project models and Pinecone index initialized successfully.")
