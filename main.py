@@ -30,7 +30,10 @@ if __name__ == "__main__":
     # 5. Print "Pretty" Output
     for i, res in enumerate(tasks):
         print(f"\n[INCIDENT {i+1}]: {df.iloc[i]['incident_id']}")
-        print(f"Report: {df.iloc[i]['report']}")
         print(f"Retrieved Context: {len(res.get('context', []))} similar cases found.")
+        print(f"Report: {res['report']}")
+        print(f"Summary: {res['summary']}")
+        print(f"Mitigation: {res['mitigation']}")
+
         # print(f"Mitigation Plan: {res.get('mitigation')}")
         print("-" * 50)
