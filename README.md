@@ -13,7 +13,7 @@ The Cybersecurity Copilot is a **Retrieval-Augmented Generation (RAG)** pipeline
     3.  **Mitigate:** An Incident Commander persona uses Chain-of-Thought (CoT) reasoning to create a prioritized NIST-aligned plan[cite: 12].
 
 ### Design Decisions & Trade-offs:
-* **Model Choice:** **Gemini 2.0 Flash** was selected for its high speed, low latency, and massive context window, allowing for processing of large technical logs without truncation[cite: 4, 30].
+* **Model Choice:** **Gemini 2.5 Flash** was selected for its high speed, low latency, and massive context window, allowing for processing of large technical logs without truncation[cite: 4, 30].
 * **Scalability:** The use of a vector database (Pinecone) ensures the knowledge base can grow from a dummy set of 10-20 incidents to thousands of historical logs without a linear increase in latency[cite: 37, 39].
 
 ---
@@ -42,12 +42,12 @@ To meet production standards, **LangSmith** is used for end-to-end observability
     1.  **Groundedness:** Verifying that the summary only uses information from the report or context[cite: 42].
     2.  **Context Relevance:** Ensuring retrieved Pinecone matches are actually helpful for the specific incident[cite: 42].
     3.  **Answer Relevance:** Checking if mitigation steps accurately address the detected root cause[cite: 42].
-* **Cost Awareness:** LangSmith tracks exact token usage per run[cite: 43]. With **Gemini 2.0 Flash**, a single run costs approximately **$0.00045**, making the solution highly cost-effective for large-scale enterprise use[cite: 43].
+* **Cost Awareness:** LangSmith tracks exact token usage per run[cite: 43]. With **Gemini 2.5 Flash**, a single run costs approximately **$0.00045**, making the solution highly cost-effective for large-scale enterprise use[cite: 43].
 
 ---
 
 ## 4. Sample Output
-**Model:** Gemini 2.0 Flash [cite: 30]
+**Model:** Gemini 2.5 Flash [cite: 30]
 
 **Input Report:** *"The payment-gateway service is throwing 504 Gateway Timeout errors for all checkout attempts. Latency spikes started appearing in the US-East-1 region after the 7:00 PM deployment."* [cite: 29]
 
