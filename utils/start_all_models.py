@@ -9,16 +9,15 @@ from pinecone import Pinecone
 from sentence_transformers import SentenceTransformer
 
 
-    # 1. Initialize Gemini 2.5 Flash
-    # We use temperature=0 for consistent, factual summaries
+# Initialize Gemini 2.5 Flash
 llm_summarize = ChatGoogleGenerativeAI(
         model="gemini-2.5-flash",
         google_api_key=os.getenv("GEMINI_API_KEY"),
-        temperature=0
+        temperature=0 # For consistent, factual summaries
     )
 
     
-    # 1. Initialize Gemini 2.5 Flash
+# Initialize Gemini 2.5 Flash
 llm_mitigate = ChatGoogleGenerativeAI(
         model="gemini-2.5-flash",
         google_api_key=os.getenv("GEMINI_API_KEY"),
