@@ -11,7 +11,7 @@ async def summarize_report(state: AgentState):
     technical context retrieved from the knowledge base.
     """
     
-    # 2. Extract data from state
+    # Extract data from state
     report = state.get("report", "No report provided.")
     context_list = state.get("context", [])
     context = "\n".join(context_list) if context_list else "No context available."
@@ -39,17 +39,17 @@ async def summarize_report(state: AgentState):
     ])
 
     try:
-        # 2. Chain and Invoke
+        # Chain and Invoke
         chain = prompt_template | llm_summarize
         
         # We use a timeout or safety check if needed
         response = await chain.ainvoke({"report": report, "context": context})
 
-        # 3. Return the summary
+        # Return the summary
         return {"summary": response.content}
 
     except Exception as e:
-        # 4. Handle LLM or Prompt failures
+        # Handle LLM or Prompt failures
         print(f"⚠️ Error in summarize_report: {e}")
         
         # Return a fallback summary so the next node (mitigation) still has something to work with

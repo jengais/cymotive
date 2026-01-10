@@ -22,7 +22,7 @@ def chunks(iterable, batch_size=100):
 
 df = pd.read_csv("ingestion/dummy_incidents_set.csv")
 
-# 1. SETUP CHUNKING
+# SETUP CHUNKING
 # chunk_size is in characters; overlap prevents cutting a sentence in half
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=500, 
@@ -30,14 +30,14 @@ text_splitter = RecursiveCharacterTextSplitter(
     separators=["\n\n", "\n", ". ", " ", ""]
 )
 
-# 2. SETUP HYBRID MODELS
+# SETUP HYBRID MODELS
 bm25_encoder = BM25Encoder()
 bm25_encoder.fit(df['Incident Description'].tolist())
 bm25_encoder.dump("ingestion/bm25_values.json")
 
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
-# 3. SETUP PINECONE
+# SETUP PINECONE
 pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 index_name = os.getenv("VEC_INDEX_NAME")
 if index_name not in pc.list_indexes().names():
@@ -45,7 +45,7 @@ if index_name not in pc.list_indexes().names():
                    spec=ServerlessSpec(cloud="aws", region="us-east-1"))
 index = pc.Index(index_name)
 
-# 4. PROCESS WITH CHUNKING
+# PROCESS WITH CHUNKING
 batch_limit = 100
 current_batch = []
 

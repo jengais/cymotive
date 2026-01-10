@@ -7,12 +7,12 @@ from pinecone_text.hybrid import hybrid_convex_scale
 async def retrieve_node(state: AgentState):
     query_text = state.get("report", "")
     
-    # 1. Safety Check: If no report, don't bother querying
+    # Safety Check: If no report, don't bother querying
     if not query_text:
         return {"context": ["No incident report provided to search for context."]}
 
     try:
-        # 2. Local Processing (Sparse + Dense)
+        # Local Processing (Sparse + Dense)
         sparse_vector = bm25_encoder.encode_queries(query_text)
         query_embedding = await asyncio.to_thread(embed_model.encode, query_text)
         query_embedding = query_embedding.tolist()
@@ -20,7 +20,7 @@ async def retrieve_node(state: AgentState):
         # Hybrid Scaling
         hdense, hsparse = hybrid_convex_scale(query_embedding, sparse_vector, alpha=0.7)
 
-        # 3. Pinecone Query with timeout/network protection
+        # Pinecone Query with timeout/network protection
         results = await asyncio.to_thread(
             index.query, 
             vector=hdense, 
@@ -29,7 +29,7 @@ async def retrieve_node(state: AgentState):
             include_metadata=True
         )
 
-        # 4. Format results with safe dictionary getting
+        # Format results with safe dictionary getting
         context_list = []
         for res in results.get('matches', []):
             metadata = res.get('metadata', {})
